@@ -16,6 +16,34 @@ body {
   fill: #fff;
 }
 
+.links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  color: #fff;
+}
+
+.findMe{
+  color: #fff;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.logo {
+  height: 30px;
+  margin: 5px;
+}
+
+a:visited {
+  color: #fff;
+}
+
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
