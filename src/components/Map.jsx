@@ -1,5 +1,7 @@
 import React from 'react'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
 import exposuresites from './exposuresites.json';
 
 require('dotenv').config()
@@ -9,40 +11,90 @@ const containerStyle = {
   height: '80vh'
 };
 
+const divStyle = {
+  background: `white`,
+  border: `1px solid #ccc`,
+  padding: 15,
+  color: `black`
+}
+
 const center = {
   lat: -37.8136,
   lng: 144.9631
 };
 
-console.log(exposuresites)
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
 
-let markers = []
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
 
-function fetchSites() {
-  // const response = fetch(exposuresites,
-  //   {
-  //     headers: {
-  //       'Content-Type': 'text/plain'
-  //     }
-  //   })
-  //   .then(response => response.json())
-    // .then(data => {
-    //   for(let i = 0; i < data.length; i++) {
-    //     markers.push(
-    //       <Marker key={'marker_'+data[i]['_id']} title={data[i]['Site_title']} position={data[i]['location']} />
-    //     )
-    //   }
-    // });
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
-  for(let i = 0; i < exposuresites.length; i++) {
-    markers.push(
-      <Marker key={'marker_'+exposuresites[i]['_id']} title={exposuresites[i]['Site_title']} position={exposuresites[i]['location']} />
-    )
-  }
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: 'absolute',
+    maxWidth: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
+
+function showInfo(exposuresite) {
+  console.log(exposuresite)
 };
 
 function MyComponent() {
-  fetchSites()
+  const classes = useStyles();
+  // getModalStyle is not a pure function, we roll the style only on the first render
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+  const [body, setBody] = React.useState('')
+
+  const handleOpen = (site) => {
+    setBody(
+      <div style={modalStyle} className={classes.paper}>
+        <h2 id="simple-modal-title">{site['Site_title']}</h2>
+        <p>{site['Exposure_date']}, {site['Exposure_time']}</p>
+        <p id="simple-modal-description">
+        {site['Advice_title']}
+        </p>
+        <p>{site['Site_streetaddress']}, {site['Site_state']}, {site['Site_postcode']}</p>
+      </div>
+    )
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+
+  let markers = []
+
+  for(let i = 0; i < exposuresites.length; i++) {
+    markers.push(
+      <>
+        <Marker 
+          key={'marker_'+exposuresites[i]['_id']} 
+          title={exposuresites[i]['Site_title']} 
+          position={exposuresites[i]['location']}
+          onClick={e => handleOpen(exposuresites[i])}
+        />
+      </>
+    )
+  }
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -71,6 +123,14 @@ function MyComponent() {
       >
         { /* Child components, such as markers, info windows, etc. */ }
         {markers}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {body}
+        </Modal>
       </GoogleMap>
   ) : <></>
 }
