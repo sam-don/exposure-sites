@@ -11,25 +11,14 @@ const containerStyle = {
   height: '80vh'
 };
 
-const divStyle = {
-  background: `white`,
-  border: `1px solid #ccc`,
-  padding: 15,
-  color: `black`
-}
-
 const center = {
   lat: -37.8136,
   lng: 144.9631
 };
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50;
+  const left = 50;
 
   return {
     top: `${top}%`,
@@ -49,11 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-function showInfo(exposuresite) {
-  console.log(exposuresite)
-};
-
 function MyComponent() {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -63,13 +47,13 @@ function MyComponent() {
 
   const handleOpen = (site) => {
     setBody(
-      <div style={modalStyle} className={classes.paper}>
+      <div id="simple-modal" style={modalStyle} className={classes.paper}>
         <h2 id="simple-modal-title">{site['Site_title']}</h2>
-        <p>{site['Exposure_date']}, {site['Exposure_time']}</p>
-        <p id="simple-modal-description">
+        <p id="simple-modal-exposure-date">{site['Exposure_date']}, {site['Exposure_time']}</p>
+        <p id="simple-modal-advice-title">
         {site['Advice_title']}
         </p>
-        <p>{site['Site_streetaddress']}, {site['Site_state']}, {site['Site_postcode']}</p>
+        <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Site_state']}, {site['Site_postcode']}</p>
       </div>
     )
     setOpen(true);
@@ -78,8 +62,6 @@ function MyComponent() {
   const handleClose = () => {
     setOpen(false);
   };
-
-
 
   let markers = []
 
@@ -101,25 +83,11 @@ function MyComponent() {
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
 
-  const [map, setMap] = React.useState(null)
-
-  // const onLoad = React.useCallback(function callback(map) {
-  //   const bounds = new window.google.maps.LatLngBounds();
-  //   map.fitBounds(bounds);
-  //   setMap(map)
-  // }, [])
-
-  // const onUnmount = React.useCallback(function callback(map) {
-  //   setMap(null)
-  // }, [])
-
   return isLoaded ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         zoom={12}
-        // onLoad={onLoad}
-        // onUnmount={onUnmount}
       >
         { /* Child components, such as markers, info windows, etc. */ }
         {markers}
