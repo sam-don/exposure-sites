@@ -53,7 +53,7 @@ function MyComponent() {
         <p id="simple-modal-advice-title">
         {site['Advice_title']}
         </p>
-        <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Site_suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
+        <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
       </div>
     )
     setOpen(true);
