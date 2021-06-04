@@ -3,6 +3,10 @@ import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import exposuresites from './exposuresites.json';
+import location_marker_1 from '../assets/location_marker_1.png'
+import location_marker_2 from '../assets/location_marker_2.png'
+import location_marker_3 from '../assets/location_marker_3.png'
+import location_marker_4 from '../assets/location_marker_4.png'
 
 require('dotenv').config()
 
@@ -37,6 +41,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
 }));
+
+const marker_icons = [
+  null,
+  location_marker_1,
+  location_marker_2,
+  location_marker_3,
+  location_marker_4
+]
 
 function MyComponent() {
   const classes = useStyles();
@@ -73,6 +85,7 @@ function MyComponent() {
           title={exposuresites[i]['Site_title']} 
           position={exposuresites[i]['location']}
           onClick={e => handleOpen(exposuresites[i])}
+          icon={marker_icons[exposuresites[i]['Advice_title'][5]]}
         />
       </>
     )
