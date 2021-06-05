@@ -2,6 +2,11 @@ import React from 'react'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import exposuresites from './exposuresites.json';
 import location_marker_1 from '../assets/location_marker_1.png'
 import location_marker_2 from '../assets/location_marker_2.png'
@@ -59,14 +64,26 @@ function MyComponent() {
 
   const handleOpen = (site) => {
     setBody(
-      <div id="simple-modal" style={modalStyle} className={classes.paper}>
-        <h2 id="simple-modal-title">{site['Site_title']}</h2>
-        <p id="simple-modal-exposure-date">{site['Exposure_date']}, {site['Exposure_time']}</p>
-        <p id="simple-modal-advice-title">
-        {site['Advice_title']}
-        </p>
-        <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
-      </div>
+      // <div id="simple-modal" style={modalStyle} className={classes.paper}>
+      //   <h2 id="simple-modal-title">{site['Site_title']}</h2>
+      //   <p id="simple-modal-exposure-date">{site['Exposure_date']}, {site['Exposure_time']}</p>
+      //   <p id="simple-modal-advice-title">
+      //   {site['Advice_title']}
+      //   </p>
+      //   <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
+      // </div>
+      <>
+        <DialogTitle id="alert-dialog-title">{site['Site_title']}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p id="simple-modal-exposure-date">{site['Exposure_date']}, {site['Exposure_time']}</p>
+            <p id="simple-modal-advice-title">
+            {site['Advice_title']}
+            </p>
+            <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
+          </DialogContentText>
+        </DialogContent>
+      </>
     )
     setOpen(true);
   };
@@ -84,7 +101,9 @@ function MyComponent() {
           key={'marker_'+exposuresites[i]['_id']} 
           title={exposuresites[i]['Site_title']} 
           position={exposuresites[i]['location']}
-          onClick={e => handleOpen(exposuresites[i])}
+          onClick={e => {
+            handleOpen(exposuresites[i])
+          }}
           icon={marker_icons[exposuresites[i]['Advice_title'][5]]}
         />
       </>
@@ -104,14 +123,22 @@ function MyComponent() {
       >
         { /* Child components, such as markers, info windows, etc. */ }
         {markers}
-        <Modal
+        {/* <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
           {body}
-        </Modal>
+        </Modal> */}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          {body}
+        </Dialog>
       </GoogleMap>
   ) : <></>
 }
