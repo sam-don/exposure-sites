@@ -2,6 +2,7 @@ import React from 'react'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -82,6 +83,11 @@ function MyComponent() {
             </p>
             <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
           </DialogContentText>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Close
+            </Button>
+          </DialogActions>
         </DialogContent>
       </>
     )
