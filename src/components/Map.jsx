@@ -62,6 +62,7 @@ function MyComponent() {
   // const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [body, setBody] = React.useState('')
+  const [done, setDone] = React.useState(false)
 
   const handleOpen = (site) => {
     setBody(
@@ -101,35 +102,38 @@ function MyComponent() {
   // let markers = []
   const [markers, setMarkers] = React.useState([])
 
-  fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/exposuresites/_search?size=1000', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
-      }
-    })
-    .then(res => res.json())
-    .then(
-      (result) => {
-        result.hits.hits.map(site => {
-          markers.push(
-              <Marker 
-                key={site['_id']} 
-                title={site['_source']['Site_title']} 
-                position={site['_source']['location']}
-                onClick={() => {
-                  handleOpen(site['_source'])
-                }}
-                icon={marker_icons[site['_source']['Advice_title'][5]]}
-              />
-          )
-          setMarkers(markers)
-          return(true)
-        })
-      }
-    )
+  const getSites = () => {
+    fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/exposuresites/_search?size=1000', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
+        }
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          result.hits.hits.map(site => {
+            markers.push(
+                <Marker 
+                  key={site['_id']} 
+                  title={site['_source']['Site_title']} 
+                  position={site['_source']['location']}
+                  onClick={() => {
+                    handleOpen(site['_source'])
+                  }}
+                  icon={marker_icons[site['_source']['Advice_title'][5]]}
+                />
+            )
+            setMarkers(markers)
+            return(true)
+          })
+          setDone(true)
+        }
+      )
+  }
 
-  
+  getSites()
 
   // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
@@ -168,7 +172,7 @@ function MyComponent() {
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
 
-  return isLoaded ? (
+  return isLoaded & done ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
