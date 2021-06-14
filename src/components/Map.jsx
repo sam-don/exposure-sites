@@ -1,14 +1,14 @@
 import React from 'react'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import exposuresites from './exposuresites.json';
+// import exposuresites from './exposuresites.json';
 import location_marker_1 from '../assets/location_marker_1.png'
 import location_marker_2 from '../assets/location_marker_2.png'
 import location_marker_3 from '../assets/location_marker_3.png'
@@ -26,27 +26,27 @@ const center = {
   lng: 144.9631
 };
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
+// function getModalStyle() {
+//   const top = 50;
+//   const left = 50;
 
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+//   return {
+//     top: `${top}%`,
+//     left: `${left}%`,
+//     transform: `translate(-${top}%, -${left}%)`,
+//   };
+// }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    maxWidth: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   paper: {
+//     position: 'absolute',
+//     maxWidth: 400,
+//     backgroundColor: theme.palette.background.paper,
+//     border: '2px solid #000',
+//     boxShadow: theme.shadows[5],
+//     padding: theme.spacing(2, 4, 3),
+//   },
+// }));
 
 const marker_icons = [
   null,
@@ -57,9 +57,9 @@ const marker_icons = [
 ]
 
 function MyComponent() {
-  const classes = useStyles();
+  // const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
+  // const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [body, setBody] = React.useState('')
 
@@ -100,21 +100,71 @@ function MyComponent() {
 
   let markers = []
 
-  for(let i = 0; i < exposuresites.length; i++) {
-    markers.push(
-      <>
-        <Marker 
-          key={'marker_'+exposuresites[i]['_id']} 
-          title={exposuresites[i]['Site_title']} 
-          position={exposuresites[i]['location']}
-          onClick={e => {
-            handleOpen(exposuresites[i])
-          }}
-          icon={marker_icons[exposuresites[i]['Advice_title'][5]]}
-        />
-      </>
+  fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/exposuresites/_search?size=1000', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
+      }
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        // sites = result.hits.hits
+        // console.log(sites)
+        // exposuresites = result['result']['records']
+        result.hits.hits.map(site => {
+          // console.log(site['_id'])
+          markers.push(
+              <Marker 
+                key={site['_id']} 
+                title={site['_source']['Site_title']} 
+                position={site['_source']['location']}
+                onClick={e => {
+                  handleOpen(site['_source'])
+                }}
+                icon={marker_icons[site['_source']['Advice_title'][5]]}
+              />
+          )
+          return(true)
+        })
+      }
     )
-  }
+
+  console.log(markers)
+
+  // for(let i = 0; i < exposuresites.length; i++) {
+  //   markers.push(
+  //     <>
+  //       <Marker 
+  //         key={'marker_'+exposuresites[i]['_id']} 
+  //         title={exposuresites[i]['Site_title']} 
+  //         position={exposuresites[i]['location']}
+  //         onClick={e => {
+  //           handleOpen(exposuresites[i])
+  //         }}
+  //         icon={marker_icons[exposuresites[i]['Advice_title'][5]]}
+  //       />
+  //     </>
+  //   )
+  // }
+
+  // for(let i = 0; i < sites.length; i++) {
+  //   console.log(sites[i]['_source']['_id'])
+  //   markers.push(
+  //     <>
+  //       <Marker 
+  //         key={'marker_'+sites[i]['_source']['_id']} 
+  //         title={sites[i]['_source']['Site_title']} 
+  //         position={sites[i]['_source']['location']}
+  //         onClick={e => {
+  //           handleOpen(sites[i]['_source'])
+  //         }}
+  //         icon={marker_icons[sites[i]['_source']['Advice_title'][5]]}
+  //       />
+  //     </>
+  //   )
+  // }
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -128,7 +178,7 @@ function MyComponent() {
         zoom={12}
       >
         { /* Child components, such as markers, info windows, etc. */ }
-        {markers}
+        {console.log(markers[0])}
         {/* <Modal
           open={open}
           onClose={handleClose}
