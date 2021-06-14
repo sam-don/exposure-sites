@@ -98,7 +98,8 @@ function MyComponent() {
     setOpen(false);
   };
 
-  let markers = []
+  // let markers = []
+  const [markers, setMarkers] = React.useState([])
 
   fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/exposuresites/_search?size=1000', {
       method: 'GET',
@@ -110,28 +111,25 @@ function MyComponent() {
     .then(res => res.json())
     .then(
       (result) => {
-        // sites = result.hits.hits
-        // console.log(sites)
-        // exposuresites = result['result']['records']
         result.hits.hits.map(site => {
-          // console.log(site['_id'])
           markers.push(
               <Marker 
                 key={site['_id']} 
                 title={site['_source']['Site_title']} 
                 position={site['_source']['location']}
-                onClick={e => {
+                onClick={() => {
                   handleOpen(site['_source'])
                 }}
                 icon={marker_icons[site['_source']['Advice_title'][5]]}
               />
           )
+          setMarkers(markers)
           return(true)
         })
       }
     )
 
-  console.log(markers)
+  
 
   // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
@@ -149,22 +147,21 @@ function MyComponent() {
   //   )
   // }
 
-  // for(let i = 0; i < sites.length; i++) {
-  //   console.log(sites[i]['_source']['_id'])
+  // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
-  //     <>
-  //       <Marker 
-  //         key={'marker_'+sites[i]['_source']['_id']} 
-  //         title={sites[i]['_source']['Site_title']} 
-  //         position={sites[i]['_source']['location']}
-  //         onClick={e => {
-  //           handleOpen(sites[i]['_source'])
-  //         }}
-  //         icon={marker_icons[sites[i]['_source']['Advice_title'][5]]}
-  //       />
-  //     </>
+  //     <Marker 
+  //       key={'marker_'+exposuresites[i]['_id']} 
+  //       title={exposuresites[i]['Site_title']} 
+  //       position={exposuresites[i]['location']}
+  //       onClick={e => {
+  //         handleOpen(exposuresites[i])
+  //       }}
+  //       icon={marker_icons[exposuresites[i]['Advice_title'][5]]}
+  //     />
   //   )
   // }
+
+  // console.log(markers)
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -178,7 +175,7 @@ function MyComponent() {
         zoom={12}
       >
         { /* Child components, such as markers, info windows, etc. */ }
-        {console.log(markers[0])}
+        {markers}
         {/* <Modal
           open={open}
           onClose={handleClose}
