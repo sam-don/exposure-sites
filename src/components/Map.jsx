@@ -131,8 +131,6 @@ function MyComponent() {
       }
     )
 
-  console.log(markers)
-
   // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
   //     <>
