@@ -102,38 +102,36 @@ function MyComponent() {
   // let markers = []
   const [markers, setMarkers] = React.useState([])
 
-  const getSites = () => {
-    fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/exposuresites/_search?size=1000', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
-        }
-      })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          result.hits.hits.map(site => {
-            markers.push(
-                <Marker 
-                  key={site['_id']} 
-                  title={site['_source']['Site_title']} 
-                  position={site['_source']['location']}
-                  onClick={() => {
-                    handleOpen(site['_source'])
-                  }}
-                  icon={marker_icons[site['_source']['Advice_title'][5]]}
-                />
-            )
-            setMarkers(markers)
-            return(true)
-          })
-          setDone(true)
-        }
-      )
-  }
+  fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/web-exposuresites/_search?size=1000', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
+      }
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        result.hits.hits.map(site => {
+          markers.push(
+              <Marker 
+                key={site['_id']} 
+                title={site['_source']['Site_title']} 
+                position={site['_source']['location']}
+                onClick={() => {
+                  handleOpen(site['_source'])
+                }}
+                icon={marker_icons[site['_source']['Advice_title'][5]]}
+              />
+          )
+          setMarkers(markers)
+          return(true)
+        })
+        setDone(true)
+      }
+    )
 
-  getSites()
+  console.log(markers)
 
   // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
