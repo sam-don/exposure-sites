@@ -82,7 +82,7 @@ function MyComponent() {
             <p id="simple-modal-advice-title">
             {site['Advice_title']}
             </p>
-            <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']}, {site['Site_postcode']}</p>
+            <p id="simple-modal-address">{site['Site_streetaddress']}, {site['Suburb']}, {site['Site_state']} {site['Site_postcode']}</p>
           </DialogContentText>
           <DialogActions>
             <Button onClick={handleClose} color="primary" autoFocus>
@@ -144,11 +144,17 @@ function MyComponent() {
           const lat = parseFloat(site['Lat'])
           const location = {"lat": lat, "lng": long}
 
+          site['Site_title'] = site['Venue']
+          site['Exposure_date'] = site['Date']
+          site['Exposure_time'] = site['Time']
+          site['Site_streetaddress'] = site['Address']
+          site['Site_state'] = 'NSW'
+
           if (site['Alert'] === 'Get tested immediately and self-isolate for 14 days') {
-            site['tier'] = 1
+            site['Advice_title'] = 'Tier 1: ' + site['Alert']
           }
           else {
-            site['tier'] = 2
+            site['Advice_title'] = 'Tier 2: ' + site['Alert']
           }
           markers.push(
               <Marker 
@@ -158,7 +164,7 @@ function MyComponent() {
                 onClick={() => {
                   handleOpen(site)
                 }}
-                icon={marker_icons[site['tier']]}
+                icon={marker_icons[site['Advice_title'][5]]}
               />
           )
           setMarkers(markers)
@@ -209,7 +215,7 @@ function MyComponent() {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={4}
+        zoom={5}
       >
         { /* Child components, such as markers, info windows, etc. */ }
         {markers}
