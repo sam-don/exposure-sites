@@ -127,6 +127,43 @@ function MyComponent() {
           setMarkers(markers)
           return(true)
         })
+      }
+    )
+
+    fetch('https://data.nsw.gov.au/data/dataset/0a52e6c1-bc0b-48af-8b45-d791a6d8e289/resource/f3a28eed-8c2a-437b-8ac1-2dab3cf760f9/download/covid-case-locations-20210619-2250.json', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        result.data.monitor.map(site => {
+          const long = parseFloat(site['Lon'])
+          const lat = parseFloat(site['Lat'])
+          const location = {"lat": lat, "lng": long}
+
+          if (site['Alert'] === 'Get tested immediately and self-isolate for 14 days') {
+            site['tier'] = 1
+          }
+          else {
+            site['tier'] = 2
+          }
+          markers.push(
+              <Marker 
+                key={site['_id']} 
+                title={site['Venue']} 
+                position={location}
+                onClick={() => {
+                  handleOpen(site)
+                }}
+                icon={marker_icons[site['tier']]}
+              />
+          )
+          setMarkers(markers)
+          return(true)
+        })
         setDone(true)
       }
     )
