@@ -158,9 +158,13 @@ function MyComponent() {
             site['Advice_title'] = site['Alert']
             site['tier'] = 1
           }
-          else {
+          else if (site['Alert'] === 'Get tested immediately and self-isolate until you receive further advice') {
             site['Advice_title'] = site['Alert']
             site['tier'] = 3
+          }
+          else {
+            site['Advice_title'] = site['Alert']
+            site['tier'] = 4
           }
 
           markers.push(
