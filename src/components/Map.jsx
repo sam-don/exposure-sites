@@ -151,10 +151,12 @@ function MyComponent() {
           site['Site_state'] = 'NSW'
 
           if (site['Alert'] === 'Get tested immediately and self-isolate for 14 days') {
-            site['Advice_title'] = 'Tier 1: ' + site['Alert']
+            site['Advice_title'] = site['Alert']
+            site['tier'] = 2
           }
           else {
-            site['Advice_title'] = 'Tier 2: ' + site['Alert']
+            site['Advice_title'] = site['Alert']
+            site['tier'] = 1
           }
           markers.push(
               <Marker 
@@ -164,7 +166,7 @@ function MyComponent() {
                 onClick={() => {
                   handleOpen(site)
                 }}
-                icon={marker_icons[site['Advice_title'][5]]}
+                icon={marker_icons[site['tier']]}
               />
           )
           setMarkers(markers)
