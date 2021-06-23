@@ -22,8 +22,8 @@ const containerStyle = {
 };
 
 const center = {
-  lat: -37.8136,
-  lng: 144.9631
+  lat: -24.9928782, // VIC: -37.8136,
+  lng: 134.2295042 //VIC: 144.9631
 };
 
 // function getModalStyle() {
@@ -209,7 +209,7 @@ function MyComponent() {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={12}
+        zoom={4}
       >
         { /* Child components, such as markers, info windows, etc. */ }
         {markers}
