@@ -154,10 +154,15 @@ function MyComponent() {
             site['Advice_title'] = site['Alert']
             site['tier'] = 2
           }
-          else {
+          else if (site['Alert'] === 'Get tested immediately. Self-isolate until you get a negative result.') {
             site['Advice_title'] = site['Alert']
             site['tier'] = 1
           }
+          else {
+            site['Advice_title'] = site['Alert']
+            site['tier'] = 3
+          }
+
           markers.push(
               <Marker 
                 key={site['_id']} 
