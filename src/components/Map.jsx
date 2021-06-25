@@ -60,9 +60,10 @@ function MyComponent() {
   // const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   // const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
   const [body, setBody] = React.useState('')
   const [done, setDone] = React.useState(false)
+  const [vicDone, setVicDone] = React.useState(false)
 
   const handleOpen = (site) => {
     setBody(
@@ -127,6 +128,7 @@ function MyComponent() {
           setMarkers(markers)
           return(true)
         })
+        setVicDone(true)
       }
     )
 
@@ -222,7 +224,7 @@ function MyComponent() {
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
 
-  return isLoaded & done ? (
+  return isLoaded & done & vicDone ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
