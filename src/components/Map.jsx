@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 // import { makeStyles } from '@material-ui/core/styles';
 // import Modal from '@material-ui/core/Modal';
@@ -103,7 +103,8 @@ function MyComponent() {
   // let markers = []
   const [markers, setMarkers] = React.useState([])
 
-  fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/web-exposuresites/_search?size=1000', {
+  useEffect(() => {
+    fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/web-exposuresites/_search?size=1000', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -186,6 +187,91 @@ function MyComponent() {
         setDone(true)
       }
     )
+  }, [])
+
+  // fetch('https://search-vicexposuresites-jcti7yn2e5lkeq2bzjg3db3fqm.ap-southeast-2.es.amazonaws.com/web-exposuresites/_search?size=1000', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Basic c2FtZG9uOlB0Y2pxMTgu'
+  //     }
+  //   })
+  //   .then(res => res.json())
+  //   .then(
+  //     (result) => {
+  //       result.hits.hits.map(site => {
+  //         markers.push(
+  //             <Marker 
+  //               key={site['_id']} 
+  //               title={site['_source']['Site_title']} 
+  //               position={site['_source']['location']}
+  //               onClick={() => {
+  //                 handleOpen(site['_source'])
+  //               }}
+  //               icon={marker_icons[site['_source']['Advice_title'][5]]}
+  //             />
+  //         )
+  //         setMarkers(markers)
+  //         return(true)
+  //       })
+  //       setVicDone(true)
+  //     }
+  //   )
+
+  //   fetch('https://data.nsw.gov.au/data/dataset/0a52e6c1-bc0b-48af-8b45-d791a6d8e289/resource/f3a28eed-8c2a-437b-8ac1-2dab3cf760f9/download/covid-case-locations-20210619-2250.json', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     }
+  //   })
+  //   .then(res => res.json())
+  //   .then(
+  //     (result) => {
+  //       result.data.monitor.map(site => {
+  //         const long = parseFloat(site['Lon'])
+  //         const lat = parseFloat(site['Lat'])
+  //         const location = {"lat": lat, "lng": long}
+
+  //         site['Site_title'] = site['Venue']
+  //         site['Exposure_date'] = site['Date']
+  //         site['Exposure_time'] = site['Time']
+  //         site['Site_streetaddress'] = site['Address']
+  //         site['Site_state'] = 'NSW'
+
+  //         if (site['Alert'] === 'Get tested immediately and self-isolate for 14 days') {
+  //           site['Advice_title'] = site['Alert']
+  //           site['tier'] = 2
+  //         }
+  //         else if (site['Alert'] === 'Get tested immediately. Self-isolate until you get a negative result.') {
+  //           site['Advice_title'] = site['Alert']
+  //           site['tier'] = 1
+  //         }
+  //         else if (site['Alert'] === 'Get tested immediately and self-isolate until you receive further advice') {
+  //           site['Advice_title'] = site['Alert']
+  //           site['tier'] = 3
+  //         }
+  //         else {
+  //           site['Advice_title'] = site['Alert']
+  //           site['tier'] = 4
+  //         }
+
+  //         markers.push(
+  //             <Marker 
+  //               key={site['_id']} 
+  //               title={site['Venue']} 
+  //               position={location}
+  //               onClick={() => {
+  //                 handleOpen(site)
+  //               }}
+  //               icon={marker_icons[site['tier']]}
+  //             />
+  //         )
+  //         setMarkers(markers)
+  //         return(true)
+  //       })
+  //       setDone(true)
+  //     }
+  //   )
 
   // for(let i = 0; i < exposuresites.length; i++) {
   //   markers.push(
